@@ -1,20 +1,25 @@
 package com.example.restservice;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class EmployeeController {
+
+    private final EmployeeRepository repository;
+
+    EmployeeController(EmployeeRepository repository) {
+        this.repository = repository;
+    }
+
     @PutMapping("/employee")
-    public String add() {
-        return "Add one employee :<pre>" + this.toString() + "</pre>";
+    public Employee add(@RequestBody Employee newEmployee) {
+        return repository.save(newEmployee);
     }
 
     @GetMapping("/employee/{id}")
-    public String one() {
-        return "Get one employee :<pre>" + this.toString() + "</pre>";
+    public Employee one(@PathVariable String id) throws JsonProcessingException {
+        return repository.findById(id);
     }
 
     @PutMapping("/employee/{id}")
