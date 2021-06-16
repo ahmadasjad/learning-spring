@@ -6,11 +6,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @Configuration
@@ -39,21 +44,32 @@ class EmployeeRepository {
     }
 
     Employee findById(String id) throws JsonProcessingException {
-        //Employee employee = new Employee();
         String filePath = this.path + id + ".json";
-        String data = this.readFile(filePath);
-        //try {
+        try {
+            String data = this.readFile(filePath);
             Employee employee = new ObjectMapper()
                     .readerFor(Employee.class)
                     .readValue(data);
             return employee;
-        /*} catch (JsonMappingException jsonMappingException) {
-            //
-            jsonMappingException.getMessage();
-        } catch (JsonProcessingException processingException) {
-            //
-        }*/
-        //return new Employee();
+        } catch (FileNotFoundException e) {
+            throw new NotFoundException(id);
+        }
+    }
+
+    List<Employee> getAll() {
+        File folder = new File(this.path);
+        String[] files = folder.list();
+        List<Employee> employees = new ArrayList<Employee>();
+
+        for (String filename: files) {
+            try {
+                employees.add(this.findById(FilenameUtils.removeExtension(filename)));
+            } catch (JsonProcessingException|NotFoundException exception) {
+
+            }
+        }
+
+        return employees;
     }
 
 /*
@@ -61,20 +77,14 @@ class EmployeeRepository {
 
     }*/
 
-    String readFile(String filePath) {
+    String readFile(String filePath) throws FileNotFoundException {
         String data = "";
-        try {
-            File myObj = new File(filePath);
-            Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
-                data += myReader.nextLine();
-                //System.out.println(data);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        File myObj = new File(filePath);
+        Scanner myReader = new Scanner(myObj);
+        while (myReader.hasNextLine()) {
+            data += myReader.nextLine();
         }
+        myReader.close();
         return data;
     }
 }

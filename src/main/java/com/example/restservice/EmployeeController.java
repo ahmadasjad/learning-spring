@@ -3,6 +3,8 @@ package com.example.restservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class EmployeeController {
 
@@ -28,7 +30,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees")
-    public String all() {
-        return "Get all employee :<pre>" + this.toString() + "</pre>";
+    public List<Employee> all() {
+        return repository.getAll();
+//        return "Get all employee :<pre>" + this.toString() + "</pre>";
     }
 }
