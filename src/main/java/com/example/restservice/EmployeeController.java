@@ -32,6 +32,5 @@ public class EmployeeController {
     @GetMapping("/employees")
     public List<Employee> all() {
         return repository.getAll();
-//        return "Get all employee :<pre>" + this.toString() + "</pre>";
     }
 }
