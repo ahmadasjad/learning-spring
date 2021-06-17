@@ -45,4 +45,10 @@ public class StudentController {
     public List<Student> all() {
         return (List<Student>) repository.findAll();
     }
+
+    @GetMapping("/students/{id}/books")
+    public List<Book> studentBooks(@PathVariable Long id) {
+        Optional<Student> student = repository.findById(id);
+        return student.get().getBooks();
+    }
 }

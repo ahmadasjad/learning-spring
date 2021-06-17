@@ -6,6 +6,8 @@ package com.example.restservice;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Student {
@@ -14,6 +16,9 @@ public class Student {
     Long id;
     private String name;
     private String email;
+
+    @OneToMany
+    private List<Book> books;
 
     protected Student() {}
 
@@ -53,4 +58,8 @@ public class Student {
 //    public String toString() {
 //        return "{\"id\": \"" + this.id + "\", \"name\": \"" + this.name + "\", \"email\": \"" + this.email + "\"}";
 //    }
+
+    public List<Book> getBooks() {
+        return this.books;
+    }
 }
