@@ -5,6 +5,8 @@ package com.example.restservice;
 //import org.springframework.web.bind.annotation.*;
 
 import com.example.restservice.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +50,8 @@ public class StudentController {
 
     @GetMapping("/students/{id}/books")
     public List<Book> studentBooks(@PathVariable Long id) {
+        Logger logger = LoggerFactory.getLogger(StudentController.class);
+        logger.info("Hello World");
         Optional<Student> student = repository.findById(id);
         return student.get().getBooks();
     }
