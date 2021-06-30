@@ -22,12 +22,8 @@ public class LocationController {
     }
 
     @GetMapping("/location/{id}/restaurant")
-    public Optional<CsRestaurant> getRestaurant(@PathVariable Integer id) {
-//        Logger logger = LoggerFactory(LocationController.class);
+    public CsRestaurant getRestaurant(@PathVariable Integer id) {
         Optional<CsLocation> location = repository.findById(id);
-//        return location;
-//        logger.debug(String)location);
-        Optional<CsRestaurant> restaurant = restaurantRepository.findById(location.get().getRestaurantid());
-        return restaurant;
+        return location.get().getRestaurant();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.restservice.entities;
 
-import com.example.restservice.repository.RestaurantRepository;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,7 +12,11 @@ public class CsLocation {
 
     @Id
     private int locationid;
-    private Integer restaurantid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurantid", insertable = false, updatable = false)
+    @Fetch(FetchMode.JOIN)
+    private CsRestaurant restaurant;
+
     private String locationname;
     private String addressTitle;
     private String address;
@@ -66,14 +71,8 @@ public class CsLocation {
         this.locationid = locationid;
     }
 
-    @Basic
-    @Column(name = "restaurantid")
-    public Integer getRestaurantid() {
-        return restaurantid;
-    }
-
-    public void setRestaurantid(Integer restaurantid) {
-        this.restaurantid = restaurantid;
+    public CsRestaurant getRestaurant() {
+        return this.restaurant;
     }
 
     @Basic
